@@ -1,0 +1,58 @@
+# Enterprise Agentic RAG - local, no gcp(google cloud platform)
+
+fastapi # high performance web framework for api
+uvicorn[standard] # asgi server to run the FastAPI app
+python-dotenv # for loading configuration from .env files
+requests # HTTP library for internal/external API calls
+streamlit # frontend dashboard for the chat interface
+numpy # numerical processing
+pytz # timezone handling for logs
+nest-asyncio # support for nested async loops in notebooks/streamlit
+
+# Gemini Embeddings
+google-generativeai # text-embedding-004 / gemini-embedding-001
+langchain-google-genai # LangChain integration for Gemini models
+
+# VECTOR DB & RETRIEVAL
+qdrant-client # Vector Database for semantic search
+flashrank # Ultra fast local cross encoder for semantic ranking
+
+# LANGCHAIN & AGENTIC ORCHESTRATION
+langchain # Core LLM Orchestration
+langgraph # state-machine logic for cyclic agent flows
+langchain-groq # integration for lightning-fast Llama 3.3 models
+langchain-google-vertexai # required shim(small piece of code) for NeMo Guardrails internal import (no GCP credentials needed)
+langchain-community # community contributed tools and loaders
+langchain-openai # OpenAI-compatible layer(used by Portkey gateway)
+pydantic>=2.0.0 # Data validation and settings management
+
+# Data Ingestion and document parsing
+unstructured # base library for docx/pptx partitioning
+python-pptx # parser for powerpoint files
+python-docx # parser for word documents
+pypdf # local pdf text extraction (replaces document ai)
+beautifulsoup4 # high speed html text extraction
+pdfplumber # fallback for pdf parser for scanned/complex layouts
+
+# observability & distributed tracing
+langsmith # specialized tracing for LangChain/LangGraph
+logfire[fastapi,requests] # pydantic LogFire - FastAPI + requests instrumentation
+loguru # enhance logging for python
+
+# guardrails
+nemoguardrails # NVIDIA NeMo Guardrails for input/output safety rails
+langchain-nvidia-ai-endpoints # Langchain integration with NVIDIA AI Endpoints
+
+# LLM Gateway 
+portkey-ai # PortKey Gateway for unified LLM routing, fallbacks & observability
+
+# evaluation(evals)
+ragas # RAG-specific evaluation metrics(Faithfulness, Relevancy, Recall)
+deepeval # Pytest compatible test runner wrapping RAGAS and safety metrics
+langfuse # live production monitoring, tracing and user feedback collection
+
+# embeddings(sentence transformers)
+sentence-transformers # used by FlashRank reranker initially
+langchain-google-genai
+
+langchain-google-vertexai
