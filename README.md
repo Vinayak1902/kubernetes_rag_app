@@ -9,7 +9,6 @@ A minimal example project that demonstrates how to use the *rag‑kubernetes* re
 ├─ graph.py         # Utility that generates a toy dependency graph
 ├─ rails.py         # Small helper for loading RAG kernels
 ├─ colang_rules.py
-├─ colang_rules.py
 └─ README.md
 ```
 
@@ -41,6 +40,4 @@ Feel free to replace the toy graph in `graph.py` with a real knowledge base (e.g
 - Run `pytest` to ensure quality.
 - Open a PR when ready.
 
-## License
 
-MIT © 2026.  All rights reserved.
