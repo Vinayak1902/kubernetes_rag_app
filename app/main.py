@@ -1,6 +1,11 @@
+# ============================================================
+# CRITICAL: logfire MUST be configured before ALL other imports
+# so that spans from all modules are captured from the start.
+# ============================================================
 import logfire
 import os
 from dotenv import load_dotenv
+import traceback
 
 load_dotenv()
 logfire.configure(token=os.getenv("LOGFIRE_TOKEN"))
@@ -13,8 +18,10 @@ from app.guardrails import initialize_rails, guard
 from pydantic import BaseModel
 from typing import Optional
 
+
 # Initialize FastAPI
 app = FastAPI(title="Enterprise Agentic RAG API")
+
 
 @app.on_event("startup")
 def startup_event():
@@ -23,10 +30,12 @@ def startup_event():
 class QueryRequest(BaseModel):
     q: str
     thread_id: Optional[str] = "default_user"
-
+    
+    
 @app.get("/")
 def home():
     return {"message": "Enterprise LangGraph RAG API is live."}
+
 
 @app.get("/graph")
 def get_graph_image():
@@ -39,13 +48,14 @@ def get_graph_image():
     except Exception as e:
         return {"error": f"Could not generate graph image: {e}"}
     
+    
 @app.post("/query")
 def query(request: QueryRequest):
     """
     Executes the LangGraph RAG flow with memory using a POST request.
     """
-    q = request.q 
-    thread_id = request.thread_id 
+    q = request.q
+    thread_id = request.thread_id
 
     initial_state = {
         "messages": [{"role": "user", "content": q}],
@@ -57,12 +67,12 @@ def query(request: QueryRequest):
     
     # Configuration for Memory (Thread ID)
     config = {"configurable": {"thread_id": thread_id}}
-
+    
     try:
-        # Gate 1: NeMo Guardrails - blocks off-topic, jailbreaks, and handles dialog
+        # Gate 1: NeMo Guardrails — blocks off-topic, jailbreaks, and handles dialog
         rail_fired, rail_response = guard(q)
         if rail_fired:
-            logfire.info(f"Request blocked by guardrails | thread={thread_id}")
+            logfire.info(f"🛡️ Request blocked by guardrails | thread={thread_id}")
             return {
                 "question": q,
                 "answer": rail_response,
@@ -70,10 +80,11 @@ def query(request: QueryRequest):
                 "status": "Blocked by guardrails.",
                 "sources": []
             }
+
         # Gate 2: LangGraph RAG pipeline
         # Run the graph synchronously to preserve Logfire context variables
-        final_output = rag_agent.invoke(initial_state,config=config)
-
+        final_output = rag_agent.invoke(initial_state, config=config)
+        
         return {
             "question": q,
             "answer": final_output.get("final_answer"),
@@ -81,8 +92,13 @@ def query(request: QueryRequest):
             "status": final_output.get("status"),
             "sources": final_output.get("documents", [])
         }
-    except Exception as e:
-        logfire.error(f"[FAILURE] Backend Execution Failed: {e}")
+    # except Exception as e:
+    #     logfire.error(f"❌ Backend Execution Failed: {e}")
+    # import traceback
+
+    except Exception:
+        traceback.print_exc()
+        raise
         return {
             "question": q,
             "answer": "I apologize, but I encountered an internal error while processing your request. Please try again later.",
