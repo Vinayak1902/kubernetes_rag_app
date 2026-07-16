@@ -2,7 +2,7 @@
 from app.agents.state import AgentState 
 
 # Import the function that returns the configured LLM(via Portkey gateway)
-from app.gateway import get_langchain_llm
+from app.gateway.client import get_langchain_llm
 
 # Import Logfire for logging and tracing execution
 import logfire

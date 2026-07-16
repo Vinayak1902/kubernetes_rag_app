@@ -29,7 +29,7 @@ workflow.add_conditional_edges(
     "planner",
     route_planner,
     {
-        "retriever": "retriver",
+        "retriever": "retriever",
         "responder": "responder"
     }
 )
